@@ -6,4 +6,4 @@ which python
 
 python setup.py sdist bdist_wheel
 
-pip install --force-reinstall dist/*.whl
+pip install --no-cache-dir --force-reinstall dist/*.whl
