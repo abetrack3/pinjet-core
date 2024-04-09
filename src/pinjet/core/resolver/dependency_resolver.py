@@ -1,6 +1,7 @@
 import inspect
 from inspect import Parameter
 from typing import Type, Set, Dict
+from threading import RLock
 
 from ..bindings.provider_registry import ProviderMappings
 from ..bindings.registry import DependencyMappings
@@ -17,21 +18,32 @@ from pinjet.common.constants import Index
 
 class DependencyResolver:
 
+    __lock = RLock()
+
+    def __new__(cls):
+        with DependencyResolver.__lock:
+            if not hasattr(DependencyResolver, "__singleton_instance"):
+                setattr(cls, '__singleton_instance', super(DependencyResolver, cls).__new__())
+        return getattr(cls, '__singleton_instance')
+
     @staticmethod
     def resolve(clazz: Type[T]) -> T:
 
         contextual_dependency_set: Set[Type] = set()
 
-        return DependencyResolver.__resolve_dependency(clazz, contextual_dependency_set)
+        return DependencyResolver.__get_singleton_instance().__resolve_dependency(clazz, contextual_dependency_set)
 
     @staticmethod
-    def __resolve_dependency(clazz: Type[T], contextual_dependency_set: Set[Type]) -> T:
+    def __get_singleton_instance() -> 'DependencyResolver':
+        return DependencyResolver()
 
-        if DependencyResolver.__is_resolvable(clazz) is not True:
+    def __resolve_dependency(self, clazz: Type[T], contextual_dependency_set: Set[Type]) -> T:
+
+        if self.__is_resolvable(clazz) is not True:
             raise UnregisteredDependencyException
 
         if ProviderMappings.contains_resolver_for(clazz):
-            return DependencyResolver.__resolve_by_provided_procedure(clazz, contextual_dependency_set)
+            return self.__resolve_by_provided_procedure(clazz, contextual_dependency_set)
 
         scope: DependencyScope = DependencyMappings.get_scope(clazz)
         implementation = DependencyMappings.get_binding(clazz)
@@ -48,13 +60,14 @@ class DependencyResolver:
         dependency_dictionary: Dict[str, Type] = {}
 
         for parameter_name, parameter_type in inspect.signature(clazz.__init__).parameters.items():
-            if DependencyResolver.__parameter_is_skippable(parameter_name, parameter_type):
+
+            if self.__parameter_is_skippable(parameter_name, parameter_type):
                 continue
 
             if parameter_type.annotation is Parameter.empty:
                 raise UnspecifiedDependencyTypeException
 
-            dependency_dictionary[parameter_name] = DependencyResolver.__resolve_dependency(
+            dependency_dictionary[parameter_name] = self.__resolve_dependency(
                 parameter_type.annotation,
                 contextual_dependency_set
             )
@@ -68,8 +81,7 @@ class DependencyResolver:
 
         return resolved
 
-    @staticmethod
-    def __resolve_by_provided_procedure(clazz: Type[T], contextual_dependency_set: Set[Type]) -> T:
+    def __resolve_by_provided_procedure(self, clazz: Type[T], contextual_dependency_set: Set[Type]) -> T:
 
         if clazz in contextual_dependency_set:
             raise CircularDependencyException
@@ -80,7 +92,7 @@ class DependencyResolver:
             return SingletonBucket.get(clazz)
 
         source_class: Type[T] = ProviderMappings.get_source_class(clazz)
-        source_class_instance = DependencyResolver.__resolve_dependency(source_class, contextual_dependency_set)
+        source_class_instance = self.__resolve_dependency(source_class, contextual_dependency_set)
 
         source_function_name: str = ProviderMappings.get_source_function_name(clazz)
         source_function = [
