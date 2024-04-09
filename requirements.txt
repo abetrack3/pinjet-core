@@ -1,0 +1,4 @@
+pinjet-common~=1.0.2
+twine~=4.0.2
+StrEnum~=0.4.15
+setuptools~=68.0.0
