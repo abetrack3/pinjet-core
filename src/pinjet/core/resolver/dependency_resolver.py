@@ -29,9 +29,11 @@ class DependencyResolver:
     @staticmethod
     def resolve(clazz: Type[T]) -> T:
 
-        contextual_dependency_set: Set[Type] = set()
+        with DependencyResolver.__lock:
 
-        return DependencyResolver.__get_singleton_instance().__resolve_dependency(clazz, contextual_dependency_set)
+            contextual_dependency_set: Set[Type] = set()
+
+            return DependencyResolver.__get_singleton_instance().__resolve_dependency(clazz, contextual_dependency_set)
 
     @staticmethod
     def __get_singleton_instance() -> 'DependencyResolver':
