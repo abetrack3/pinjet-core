@@ -1,7 +1,7 @@
 import inspect
 from inspect import Parameter
 from typing import Type, Set, Dict
-from threading import RLock
+from threading import Lock
 
 from ..bindings.provider_registry import ProviderMappings
 from ..bindings.registry import DependencyMappings
@@ -18,22 +18,24 @@ from pinjet.common.constants import Index
 
 class DependencyResolver:
 
-    __lock = RLock()
+    __lock: Lock = Lock()
 
     def __new__(cls):
         with DependencyResolver.__lock:
             if not hasattr(DependencyResolver, "__singleton_instance"):
-                setattr(cls, '__singleton_instance', super(DependencyResolver, cls).__new__())
+                setattr(cls, '__singleton_instance', super(DependencyResolver, cls).__new__(cls))
         return getattr(cls, '__singleton_instance')
 
     @staticmethod
     def resolve(clazz: Type[T]) -> T:
 
+        resolver = DependencyResolver.__get_singleton_instance()
+
         with DependencyResolver.__lock:
 
             contextual_dependency_set: Set[Type] = set()
 
-            return DependencyResolver.__get_singleton_instance().__resolve_dependency(clazz, contextual_dependency_set)
+            return resolver.__resolve_dependency(clazz, contextual_dependency_set)
 
     @staticmethod
     def __get_singleton_instance() -> 'DependencyResolver':
