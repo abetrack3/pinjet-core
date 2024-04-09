@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 
 VERSION = '0.0.1-beta.1'
-DESCRIPTION = 'Small like a pin, fast like a jet! A lightweight Injection library for python'
+DESCRIPTION = 'Small like a pin, fast like a jet! A lightweight Dependency Injection library for python'
 AUTHOR = 'abetrack3 (Abrar Shahriar Abeed)'
 AUTHOR_EMAIL = '<abrarshahriar2361@gmail.com>'
 
