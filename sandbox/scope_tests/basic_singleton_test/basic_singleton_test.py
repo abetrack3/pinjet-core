@@ -1,3 +1,4 @@
+import unittest
 from pinjet.core.annotations.injectable import injectable
 from pinjet.core.resolver.dependency_resolver import DependencyResolver
 
@@ -8,15 +9,19 @@ class SingletonClassToBeResolved:
     pass
 
 
-resolved_singleton = DependencyResolver.resolve(SingletonClassToBeResolved)
+class BasicSingletonTest(unittest.TestCase):
 
-another_singleton = DependencyResolver.resolve(SingletonClassToBeResolved)
+    def test_singleton(self):
 
-if resolved_singleton is another_singleton:
+        # Act
+        resolved_singleton_1 = DependencyResolver.resolve(SingletonClassToBeResolved)
+        resolved_singleton_2 = DependencyResolver.resolve(SingletonClassToBeResolved)
 
-    print("Singleton resolved")
+        # Assert
+        self.assertIs(resolved_singleton_1, resolved_singleton_2)
 
-else:
 
-    print("Singleton not resolved")
+if __name__ == '__main__':
+    print('Basic Singleton Test')
+    unittest.main()
 
