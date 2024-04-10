@@ -16,3 +16,11 @@ class MultipleProviderForDependencyResolution(Exception):
 
 class DuplicateSingletonInstanceException(Exception):
     pass
+
+
+class TargetTypeNotSpecifiedException(Exception):
+    pass
+
+
+class AnnotationTargetTypeMismatchException(Exception):
+    pass
