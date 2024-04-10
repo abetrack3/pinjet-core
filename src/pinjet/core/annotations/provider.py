@@ -2,7 +2,9 @@ import inspect
 from inspect import Signature, Parameter
 from typing import Type, Callable, Dict, List
 
+from .target import target
 from ..bindings.provider_registry import ProviderMappings
+from ..constants.element_type import ElementType
 from ..exception.exceptions import (
     UnspecifiedDependencyTypeException,
     MultipleProviderForDependencyResolution,
@@ -11,6 +13,7 @@ from ..annotations.injectable import injectable
 from ..types.resolution_procedure import ResolutionProcedure
 
 
+@target(ElementType.METHOD)
 def provides(function: Callable) -> Callable:
 
     properties: Dict = vars(function)
@@ -23,6 +26,7 @@ def provides(function: Callable) -> Callable:
     return function
 
 
+@target(ElementType.CLASS)
 def provider(clazz: Type) -> Type:
 
     injectable(clazz)

@@ -1,9 +1,12 @@
 from typing import Type, Union, Callable
 
+from .target import target
 from ..bindings.registry import DependencyMappings
+from ..constants.element_type import ElementType
 from ..constants.dependency_scope import DependencyScope
 
 
+@target(ElementType.CLASS)
 def injectable(cls: Type = None,
                scope: DependencyScope = DependencyScope.SINGLETON) -> Union[Type, Callable[[Type], Type]]:
     """

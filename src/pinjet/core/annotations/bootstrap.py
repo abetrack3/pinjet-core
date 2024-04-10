@@ -1,8 +1,11 @@
 from typing import Callable, Any
 
+from .target import target
+from ..constants.element_type import ElementType
 from ..resource_scanner.resource_scanner import RepositoryScanner
 
 
+@target(ElementType.FUNCTION)
 def pinjet_application(function: Callable) -> Callable:
 
     def decorated_function(*args, **kwargs) -> Any:
