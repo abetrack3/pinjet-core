@@ -1,3 +1,4 @@
+import unittest
 from pinjet.core.annotations.injectable import injectable
 from pinjet.core.constants.dependency_scope import DependencyScope
 from pinjet.core.resolver.dependency_resolver import DependencyResolver
@@ -8,19 +9,18 @@ class PrototypeClassToBeResolved:
     pass
 
 
-resolved_instance = DependencyResolver.resolve(PrototypeClassToBeResolved)
+class BasicPrototypeTest(unittest.TestCase):
 
-print(resolved_instance)
+    def test_basic_prototype(self):
 
-resolved_instance2 = DependencyResolver.resolve(PrototypeClassToBeResolved)
+        # Act
+        resolved_instance_1 = DependencyResolver.resolve(PrototypeClassToBeResolved)
+        resolved_instance_2 = DependencyResolver.resolve(PrototypeClassToBeResolved)
 
-print(resolved_instance2)
+        # Assert
+        self.assertIsNot(resolved_instance_1, resolved_instance_2)
 
-if resolved_instance is not resolved_instance2:
 
-    print('successful prototype creation')
-
-else:
-
-    print('failed prototype creation')
-
+if __name__ == '__main__':
+    print('Basic Prototype Test')
+    unittest.main()
