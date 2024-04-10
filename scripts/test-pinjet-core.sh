@@ -6,3 +6,4 @@ python ../sandbox/resource_scanner_test/resource_scanner_test.py
 python ../sandbox/scope_tests/basic_prototype_test/basic_prototype_test.py
 python ../sandbox/scope_tests/basic_singleton_test/basic_singleton_test.py
 python ../sandbox/scope_tests/thread_safe_singleton_test/thread_safe_singleton_test.py
+python ../sandbox/annotation_target_element_type_enforcement_test/annotation_target_element_type_enforcement_test.py
