@@ -1,22 +1,27 @@
+import unittest
 from argparse import ArgumentParser
 
 from pinjet.core.annotations.bootstrap import pinjet_application
 from pinjet.core.resolver.dependency_resolver import DependencyResolver
 
 
-print('before pinjet_application')
+class ResourceScannerTest(unittest.TestCase):
 
-@pinjet_application
-def __main__():
-    parser = DependencyResolver.resolve(ArgumentParser)
+    def test_resource_scanner(self):
 
-    print(parser)
+        # Arrange
+        @pinjet_application
+        def main() -> ArgumentParser:
 
-print('after pinjet_application')
+            return DependencyResolver.resolve(ArgumentParser)
+
+        # Act
+        argument_parser = main()
+
+        # Assert
+        self.assertIsInstance(argument_parser, ArgumentParser)
+
 
 if __name__ == '__main__':
-    print('Resource scanner test')
-
-    __main__()
-
-print('Resource scanner test')
+    print('Resource Scanner Test')
+    unittest.main()
