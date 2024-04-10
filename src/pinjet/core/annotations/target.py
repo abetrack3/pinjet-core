@@ -28,7 +28,10 @@ def target(element: ElementType) -> Callable:
             if element is ElementType.CLASS and inspect.isclass(callable_object) is not True:
                 raise AnnotationTargetTypeMismatchException
 
-            if element is ElementType.METHOD and inspect.isfunction(callable_object) is not True:
+            if (element is ElementType.METHOD and
+                    (inspect.isfunction(callable_object) or
+                     inspect.ismethod(callable_object)) is not True):
+
                 raise AnnotationTargetTypeMismatchException
 
             return target_decorator_function(callable_object, *args, **kwargs)
