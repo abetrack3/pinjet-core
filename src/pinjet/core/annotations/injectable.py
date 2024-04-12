@@ -17,6 +17,7 @@ def injectable(cls: Type = None,
     :param scope: Lifespan of instance - multiple or single
     :return: the registered class or the decorated function that will register the class
     """
+
     if cls is not None:
 
         if isinstance(cls, DependencyScope) is False:
@@ -26,7 +27,9 @@ def injectable(cls: Type = None,
             scope = cls
 
     def injectable_decorator(clazz: Type) -> Type:
+
         DependencyMappings.bind(clazz, clazz, scope)
+
         return clazz
 
     return injectable_decorator
