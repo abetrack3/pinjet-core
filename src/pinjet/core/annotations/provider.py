@@ -13,7 +13,7 @@ from ..annotations.injectable import injectable
 from ..types.resolution_procedure import ResolutionProcedure
 
 
-@target(ElementType.METHOD)
+@target(ElementType.INSTANCE_METHOD)
 def provides(function: Callable) -> Callable:
 
     properties: Dict = vars(function)
