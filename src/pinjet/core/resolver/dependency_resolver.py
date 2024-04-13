@@ -44,7 +44,7 @@ class DependencyResolver:
     def __resolve_dependency(self, clazz: Type[T], contextual_dependency_set: Set[Type]) -> T:
 
         if self.__is_resolvable(clazz) is not True:
-            raise UnregisteredDependencyException
+            raise UnregisteredDependencyException(clazz)
 
         if ProviderMappings.contains_resolver_for(clazz):
             return self.__resolve_by_provided_procedure(clazz, contextual_dependency_set)
@@ -53,7 +53,7 @@ class DependencyResolver:
         implementation = DependencyMappings.get_binding(clazz)
 
         if implementation in contextual_dependency_set:
-            raise CircularDependencyException
+            raise CircularDependencyException(implementation)
         else:
             contextual_dependency_set.add(implementation)
 
@@ -69,7 +69,9 @@ class DependencyResolver:
                 continue
 
             if parameter_type.annotation is Parameter.empty:
-                raise UnspecifiedDependencyTypeException
+                raise UnspecifiedDependencyTypeException(
+                    f'Missing type annotation for Constructor parameter: {parameter_name}'
+                )
 
             dependency_dictionary[parameter_name] = self.__resolve_dependency(
                 parameter_type.annotation,
@@ -88,7 +90,7 @@ class DependencyResolver:
     def __resolve_by_provided_procedure(self, clazz: Type[T], contextual_dependency_set: Set[Type]) -> T:
 
         if clazz in contextual_dependency_set:
-            raise CircularDependencyException
+            raise CircularDependencyException(clazz)
         else:
             contextual_dependency_set.add(clazz)
 

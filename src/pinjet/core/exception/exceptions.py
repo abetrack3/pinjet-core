@@ -1,27 +1,37 @@
-from typing import Callable
+from typing import Callable, Type
 
 from pinjet.common.constants import String
 from pinjet.core.constants.element_type import ElementType
 
 
 class UnregisteredDependencyException(Exception):
-    pass
+
+    def __init__(self, dependency: Type):
+        super().__init__(f'Unregistered dependency "{dependency.__qualname__}"')
 
 
 class CircularDependencyException(Exception):
-    pass
+
+    def __init__(self, dependency: Type):
+        super().__init__(f'Circular dependency "{dependency.__qualname__}"')
 
 
 class UnspecifiedDependencyTypeException(Exception):
-    pass
+
+    def __init__(self, message: str = String.EMPTY):
+        super().__init__(message)
 
 
 class MultipleProviderForDependencyResolution(Exception):
-    pass
+
+    def __init__(self, dependency: Type):
+        super().__init__(f'More than one provider method for dependency "{dependency.__qualname__}" detected')
 
 
 class DuplicateSingletonInstanceException(Exception):
-    pass
+
+    def __init__(self, singleton_dependency: Type):
+        super().__init__(f'Duplicate singleton instance "{singleton_dependency.__qualname__}" detected')
 
 
 class TargetTypeNotSpecifiedException(Exception):

@@ -28,9 +28,9 @@ class SingletonBucket:
     def put(key: Type[T], value: T) -> None:
         singleton_bucket = SingletonBucket.__get_singleton_instance()
         with SingletonBucket.__lock:
-            singleton_object = singleton_bucket._bucket[key] = value
-            if value is not singleton_object:
-                raise DuplicateSingletonInstanceException
+            if key in singleton_bucket._bucket:
+                raise DuplicateSingletonInstanceException(key)
+            singleton_bucket._bucket[key] = value
 
     @staticmethod
     def get(key: Type[T]) -> T:

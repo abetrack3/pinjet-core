@@ -47,10 +47,10 @@ def provider(clazz: Type) -> Type:
             target_instance_type: Type = signature.return_annotation
 
             if target_instance_type is None or target_instance_type is Parameter.empty:
-                raise UnspecifiedDependencyTypeException
+                raise UnspecifiedDependencyTypeException(f'Missing return type annotation in Provider method: {name}')
 
             if ProviderMappings.contains_resolver_for(target_instance_type):
-                raise MultipleProviderForDependencyResolution
+                raise MultipleProviderForDependencyResolution(target_instance_type)
 
             resolution_procedure: ResolutionProcedure = ResolutionProcedure(source_class=clazz,
                                                                             source_function_name=name)
