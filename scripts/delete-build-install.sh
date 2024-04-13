@@ -1,9 +1,10 @@
-rm -rf build
-rm -rf dist
-rm -rf src/pinjet_core.egg-info
+# Removing Artifacts
+rm -rfv build
+rm -rfv dist
+rm -rfv src/*.egg-info
 
-which python
-
+# Build Package
 python setup.py sdist bdist_wheel
 
+# Install package for sandbox testing
 pip install --no-cache-dir --force-reinstall dist/*.whl
