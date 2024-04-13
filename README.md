@@ -1,4 +1,5 @@
-# Pinjet: Small like a pin, fast like a jet! A lightweight Dependency Injection library for Python
+# Pinjet
+#### Small like a pin, fast like a jet! A lightweight Dependency Injection library for Python
 
 ---
 
