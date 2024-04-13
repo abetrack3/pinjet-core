@@ -70,7 +70,7 @@ class DependencyResolver:
 
             if parameter_type.annotation is Parameter.empty:
                 raise UnspecifiedDependencyTypeException(
-                    f'Missing type annotation for Constructor parameter: {parameter_name}'
+                    f'Missing type for Constructor parameter: {parameter_name}'
                 )
 
             dependency_dictionary[parameter_name] = self.__resolve_dependency(
