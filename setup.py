@@ -17,4 +17,11 @@ setup(
     install_requires=[
         'pinjet-common~=1.0.2'
     ],
+    keywords=[
+        'python',
+        'dependency injection',
+        'di framework',
+        'ioc',
+        'inversion of control',
+    ],
 )
