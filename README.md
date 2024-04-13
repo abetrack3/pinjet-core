@@ -16,7 +16,7 @@ Numerous Dependency Injection (DI) frameworks exist for Python, yet none are fla
 
 *In Pinjet, the terms "annotation" and "decorator" are frequently interchanged and carry the same meaning.*
 
-### Quick Exmaple
+#### Quick Exmaple
 ```python
 from pinjet.core.resolver.dependency_resolver import DependencyResolver
 from pinjet.core.annotations.injectable import injectable
@@ -37,7 +37,7 @@ Pinjet simplifies the usage by employing `@injectable` to mark any classes requi
 
 By default, any class marked with `@injectable` is considered a singleton, ensuring the same instance is returned every time `resolve()` is called. However, if you prefer a new instance on each call to `resolve()`, simply specify the dependency scope as **PROTOTYPE** in `@injectable`.
 
-### Example
+#### Example
 ```python
 
 from pinjet.core.annotations.injectable import injectable
@@ -90,7 +90,7 @@ For any Python projects where codes are distributed across modules, Pinjet recom
 - scan the repository to identify all dependencies with the help of `@pinjet_application`
 - ensuring `DependencyResolver` is primed to serve the application.
 
-### Example
+#### Example
 
 ```python
 from argparse import ArgumentParser
@@ -116,7 +116,7 @@ Here ArgumentParser is configured to instantiate using `@provider` and `@provide
 
 To enhance developer experience, Pinjet introduces decorator type safety. For example, `@injectable` is exclusively meant for **classes**, while `@pinjet_application` is meant for **functions**. Introducing `@target`, a special decorator, which ensures decorators are applied to their intended elements.
 
-### Quick Demonstration
+#### Quick Demonstration
 
 ```python
 from functools import wraps
